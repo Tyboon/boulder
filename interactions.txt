@@ -87,11 +87,11 @@ parallel interaction Break
 end
 
 parallel interaction RollRight
-	condition nothing-right?
+	condition nothing-right? on-diamond-or-rock?
 	actions rollRight
 end
 
 parallel interaction RollLeft
-	condition nothing-left?
+	condition nothing-left? on-diamond-or-rock?
 	actions rollLeft
 end

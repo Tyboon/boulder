@@ -271,8 +271,6 @@ to-report rocks::moving?
 end
 
 to-report walls::destructible?
-  print(destructible?)
-  print("ici")
   report destructible?
 end
 
@@ -299,6 +297,10 @@ end
 
 to-report rocks::nothing-ahead?
   report default::nothing-ahead? 1
+end
+
+to-report rocks::on-diamond-or-rock?
+  report (((any? diamonds-on patch-at 0 -1) or (any? rocks-on patch-at 0 -1)) and not (any? heros-on patch-at 0 -1))
 end
 
 to rocks::push
@@ -435,7 +437,7 @@ to walls::break
 end
 
 to blast::filter-neighbors
-  ioda:filter-neighbors-on-patches (patch-set patch-here)
+  ioda:filter-neighbors-in-radius 5
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
