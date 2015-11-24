@@ -58,4 +58,5 @@ heros		Collect		 80    	diamonds	 1
 heros		Explode		 100    monsters	 0 
 heros 		Push 		 100 	rocks 		 1
 
-blast 		Break 		 100 	walls 		 2
+blast 		Kill 		 100 	UPDATE 
+blast 		Create-diamonds	 80	UPDATE			 

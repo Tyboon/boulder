@@ -246,8 +246,9 @@ to diamonds::move-down
 end
 
 to diamonds::create-blast
+  let target ioda:my-target
   let dm? ifelse-value ([breed] of ioda:my-target = monsters) [ [right-handed?] of ioda:my-target ] [ true ]
-  hatch-blast 1 [ init-blast dm? ]
+  hatch-blast 1 [ init-blast dm? move-to target]
 end
 
 to diamonds::die
@@ -287,8 +288,9 @@ to rocks::move-down
 end
 
 to rocks::create-blast
+  let target ioda:my-target
   let dm? ifelse-value ([breed] of ioda:my-target = monsters) [ [right-handed?] of ioda:my-target ] [ true ]
-  hatch-blast 1 [ init-blast dm? ]
+  hatch-blast 1 [ init-blast dm? move-to target]
 end
 
 to rocks::die
@@ -436,8 +438,26 @@ to walls::break
   ioda:die
 end
 
-to blast::filter-neighbors
-  ioda:filter-neighbors-in-radius 5
+to blast::kill
+  ask turtles-on neighbors [
+    if ((breed != walls and breed != doors) or (breed = walls and destructible?))
+    ;vérifier la porte !!!!!!
+    [ioda:die]
+    ]
+end
+
+to blast::die
+  ioda:die
+end
+
+to-report blast::dm?
+  report diamond-maker?
+end
+
+to blast::create-diamonds
+  ask neighbors [
+    sprout-diamonds 1 [init-diamond]
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW

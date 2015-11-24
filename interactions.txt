@@ -81,9 +81,8 @@ parallel interaction Push
 	actions target:push
 end
 
-parallel interaction Break
-	condition target:destructible?
-	actions target:break
+parallel interaction Kill
+	actions kill die
 end
 
 parallel interaction RollRight
@@ -94,4 +93,9 @@ end
 parallel interaction RollLeft
 	condition nothing-left? on-diamond-or-rock?
 	actions rollLeft
+end
+
+parallel interaction Create-diamonds
+	condition dm?
+	actions create-diamonds die
 end
