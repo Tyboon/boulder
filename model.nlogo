@@ -31,12 +31,20 @@ to setup
 end
 
 to go
+  set countdown 10
   ioda:go
   tick
   ifelse (not any? heros)
-    [ ifelse (countdown = 0) [ user-message "GAME OVER !" stop ] [ set countdown countdown - 1 ]]
+    [ ifelse (countdown = 0) [ user-message "GAME OVER !" set level "level0" init-world] [init-world]];[ set countdown countdown - 1 ]] ;BUG ICI !!!!
     [ if (all? heros [any? doors-here with [open?]])
-        [ user-message "CONGRATULATIONS !" stop ]
+      [ifelse (level = "level2")
+        [ user-message "CONGRATULATIONS !" stop ] ;si dernier niveau, congratulations
+        [ ifelse (level = "level0") ;sinon on passe au niveau supérieur
+          [set level "level1"]
+          [set level "level2"]
+          init-world
+        ]
+      ]
     ]
 
 end
@@ -94,7 +102,7 @@ to init-world
   set-default-shape dirt "dirt"
   set-default-shape blast "star"
   read-level (word level ".txt")
-  set countdown 0
+  ;set countdown 0
   set nb-to-collect count diamonds
 end
 
@@ -255,6 +263,27 @@ to diamonds::die
   ioda:die
 end
 
+
+to-report diamonds::nothing-right?
+  report (not any? turtles-on patch-at 1 0 and not any? turtles-on patch-at 1 -1)
+end
+
+to-report diamonds::nothing-left?
+  report (not any? turtles-on patch-at -1 0 and not any? turtles-on patch-at -1 -1)
+end
+
+
+to diamonds::rollRight
+  move-to patch-at 1 0
+end
+
+to diamonds::rollLeft
+  move-to patch-at -1 0
+end
+
+to-report diamonds::on-diamond-or-rock?
+  report (((any? diamonds-on patch-at 0 -1) or (any? rocks-on patch-at 0 -1)) and not (any? heros-on patch-at 0 -1))
+end
 
 
 ; rocks-related primitives
@@ -417,7 +446,7 @@ to heros::stop-moving
 end
 
 to heros::die
-  set countdown 10
+  set countdown countdown - 1
   ioda:die
 end
 
@@ -644,9 +673,9 @@ nb-to-collect
 15
 
 CHOOSER
-278
+279
 63
-416
+417
 108
 level
 level
