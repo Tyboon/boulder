@@ -394,9 +394,8 @@ to rocks::push
   face h
   right 180
   let n turtles-on patch-ahead 1
-  if ( not ( [breed] of n = walls ) or ( ( [breed] of n = walls ) and not ( [magic?] of n) ))
-  ;if (not any? turtles-on patch-ahead 1 and not (heading = 0))
-  [move-to patch-ahead 1]
+  if ( (not any? turtles-on patch-ahead 1 and not (heading = 0)) or (( [breed] of n = walls ) and ( [magic?] of n) ))
+  [ move-to patch-ahead 1]
 end
 
 to-report rocks::nothing-right?
@@ -431,7 +430,7 @@ to-report monsters::moving?
 end
 
 to monsters::move-forward
-  if (ticks mod 50 = 0)
+  if (ticks mod 10 = 0)
   [default::move-forward]
 end
 
@@ -546,12 +545,37 @@ end
 
 ; blast-related primitives
 
+;to blast::kill
+;  ask turtles-on neighbors [
+;    if ((breed != walls and breed != doors) or (breed = walls and destructible?))
+;    [ioda:die]
+;    ]
+;end
+
 to blast::kill
-  ask turtles-on neighbors [
+  let n turtles-on neighbors
+  ask n [
     if ((breed != walls and breed != doors) or (breed = walls and destructible?))
-    ;vérifier la porte !!!!!!
     [ioda:die]
+    let n1 any? turtles-on neighbors
+    4n1 [
+      let rdm1 (random 3 >= 1)
+      if (rdm1 and ((breed != walls and breed != doors) or (breed = walls and destructible?)))
+      [ioda:die]
+      let n2 turtles-on neighbors
+      ask n2 [
+        let rdm2 (random 2 = 0)
+        if (rdm2 and ((breed != walls and breed != doors) or (breed = walls and destructible?)))
+        [ioda:die]
+        ;let n3 turtles-on neighbors
+        ;ask n3 [
+          ;let rdm3 (random 3 >= 2)
+          ;if (rdm3 and ((breed != walls and breed != doors) or (breed = walls and destructible?)))
+          ;[ioda:die]
+        ;]
+      ]
     ]
+  ]
 end
 
 to blast::die
@@ -583,12 +607,10 @@ end
 to dynamites::explode
   ask turtles-on neighbors [
     if ((breed != walls and breed != doors) or (breed = walls and destructible?))
-    ;vérifier la porte !!!!!!
     [ioda:die]
     ]
   ask turtles-on patch-here [
     if ((breed != walls and breed != doors) or (breed = walls and destructible?))
-    ;vérifier la porte !!!!!!
     [ioda:die]
     ]
 end
@@ -656,13 +678,12 @@ end
 to lifes::die
   ioda:die
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 637
 10
-882
-175
+1209
+603
 -1
 -1
 22.5
@@ -676,8 +697,8 @@ GRAPHICS-WINDOW
 0
 1
 0
-8
--5
+24
+-24
 0
 0
 0
@@ -918,7 +939,7 @@ SWITCH
 155
 tutorial
 tutorial
-0
+1
 1
 -1000
 
