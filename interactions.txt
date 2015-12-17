@@ -33,7 +33,7 @@ parallel interaction Fall
 end
 
 parallel interaction StopFalling
-  condition	     moving? 
+  condition	    not-target-magic? moving? 
   actions	     stop-moving
 end
 
@@ -71,7 +71,7 @@ end
 
 parallel interaction Collect
   trigger	     target-ahead?
-  condition 	     moving?
+  condition 	     moving? no-wall?
   actions	     target:die increase-score move-forward
 end
 
@@ -98,4 +98,18 @@ end
 parallel interaction Create-diamonds
 	condition dm?
 	actions create-diamonds die
+end
+
+parallel interaction Change-into-diamond
+	condition on-magic?
+	actions change-into-diamond die
+end
+
+parallel interaction Explode_Dynamite
+	condition counter-ok?
+	actions explode die
+end 
+
+parallel interaction Propagate_dist
+	actions propagate-dist
 end
