@@ -349,13 +349,6 @@ to-report rocks::not-target-magic?
   report ([breed] of target != walls or not ([breed] of target = walls and ([magic?] of target)))
 end
 
-to-report walls::destructible?
-  report destructible?
-end
-
-to-report walls::magic?
-  report magic?
-end
 
 to rocks::start-moving
   default::start-moving
@@ -400,7 +393,9 @@ to rocks::push
   let h ioda:my-target
   face h
   right 180
-  if (not any? turtles-on patch-ahead 1 and not (heading = 0))
+  let n turtles-on patch-ahead 1
+  if ( not ( [breed] of n = walls ) or ( ( [breed] of n = walls ) and not ( [magic?] of n) ))
+  ;if (not any? turtles-on patch-ahead 1 and not (heading = 0))
   [move-to patch-ahead 1]
 end
 
@@ -541,6 +536,14 @@ to walls::break
   ioda:die
 end
 
+to-report walls::destructible?
+  report destructible?
+end
+
+to-report walls::magic?
+  report magic?
+end
+
 ; blast-related primitives
 
 to blast::kill
@@ -659,7 +662,7 @@ GRAPHICS-WINDOW
 637
 10
 882
-130
+175
 -1
 -1
 22.5
@@ -673,8 +676,8 @@ GRAPHICS-WINDOW
 0
 1
 0
-7
--3
+8
+-5
 0
 0
 0
@@ -906,7 +909,7 @@ CHOOSER
 tutorials
 tutorials
 "dynamites" "magic_walls" "lifes"
-0
+1
 
 SWITCH
 429

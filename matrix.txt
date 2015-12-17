@@ -42,8 +42,7 @@ rocks		StopFalling 	 10 	dirt		 1
 rocks		StopFalling 	 10 	diamonds 	 1 
 rocks		StopFalling 	 10 	rocks		 1 
 rocks		StopFalling 	 10 	doors		 1 
-rocks		StopFalling 	 10 	dynamites		 1 
-
+rocks		StopFalling 	 10 	dynamites	 1 
 rocks		Explode 	 50 	monsters	 1 
 rocks		Explode 	 50 	heros		 1 
 rocks		RollRight 	 0 
@@ -67,11 +66,13 @@ heros		Dig		 20 	dirt		 1
 heros		Collect		 80    	diamonds	 1 
 heros		Explode		 100    monsters	 0 
 heros 		Push 		 100 	rocks 		 1
+heros		Collect		 80    	dynamites	 1 
+heros 		Collect 	 80 	lifes 		 1
 
 blast 		Kill 		 100 	UPDATE 
 blast 		Create-diamonds	 80	UPDATE
 			 
-heros		Collect		 80    	dynamites	 1 
+
 dynamites 	Explode_Dynamite 	10 
 dynamites	StartFalling	 0 	UPDATE
 dynamites	Fall 		 0 
@@ -82,4 +83,4 @@ dynamites	StopFalling 	 10 	rocks		 1
 dynamites	StopFalling 	 10 	doors		 1 
 dynamites	StopFalling 	 10 	dynamites		 1 
 
-heros 	Collect 	80 	lifes 	1
+
