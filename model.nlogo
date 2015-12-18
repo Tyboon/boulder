@@ -57,11 +57,14 @@ to go
     [ if (all? heros [any? doors-here with [open?]])
       [ifelse (tutorial)
         [setup 10]
-      [ifelse (level = "level2")
+      [ifelse (level = "level4")
         [ user-message "CONGRATULATIONS !" stop ] ;si dernier niveau, congratulations
         [ ifelse (level = "level0") ;sinon on passe au niveau supérieur
           [set level "level1"]
-          [set level "level2"]
+          [ifelse (level = "level2")
+            [set level "level3" ]
+            [set level "level4" ]
+            ]
           init-world
         ]
       ]
