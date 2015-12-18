@@ -105,7 +105,7 @@ to create-agent [ char ]
             [ ifelse (char = "H")
                 [ sprout-heros 1 [ init-hero ]]
                 [ ifelse (char = "D")
-                    [ sprout-diamonds 1 [ init-diamond ]]
+                    [ sprout-diamonds 1 [ init-diamond cyan]]
                     [ ifelse (char = "R")
                         [ sprout-rocks 1 [ init-rock ]]
                         [ ifelse (char = "M")
@@ -133,7 +133,10 @@ to create-agent [ char ]
                                       ]
                                          [ifelse (char = "W")
                                              [sprout-transports 1 [init-transports white]]
-                                             []
+                                             [ifelse (char = "c")
+                                               [sprout-diamonds 1 [init-diamond red]]
+                                               []
+                                               ]
                                              ]
                                     ]
                                     ]
@@ -208,10 +211,14 @@ to init-rock
   set moving? false
 end
 
-to init-diamond
+to init-diamond [c]
   ioda:init-agent
   set heading 180
   set moving? false
+  set color c
+  if(c = red)
+   [set shape "diamond_red"]
+
 end
 
 to init-blast [ s dm? ]
@@ -482,7 +489,7 @@ to-report monsters::moving?
 end
 
 to monsters::move-forward
-  if (ticks mod 10 = 0)
+  if (ticks mod 20 = 0)
   [default::move-forward]
 end
 
@@ -571,8 +578,11 @@ end
 
 to heros::increase-score
   ifelse ([breed] of ioda:my-target = diamonds)
-  [set score score + 1
-  set nb-to-collect nb-to-collect - 1]
+  [ ifelse ([color] of ioda:my-target = red)
+    [set score score + 10]
+    [set score score + 1]
+    if(nb-to-collect > 0)
+  [set nb-to-collect nb-to-collect - 1]]
   [ifelse ([breed] of ioda:my-target = dynamites)
     [set nb_dynamites nb_dynamites + 1]
     [set countdown (countdown + 1)]
@@ -658,7 +668,7 @@ end
 to blast::create-diamonds
   ask neighbors [
     if not any? turtles-here [
-      sprout-diamonds 1 [init-diamond]
+      sprout-diamonds 1 [init-diamond one-of [cyan red]]
     ]
   ]
 end
