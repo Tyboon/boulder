@@ -69,7 +69,7 @@ heros 		Push 		 100 	rocks 		 1
 heros		Collect		 80    	dynamites	 1 
 heros 		Collect 	 80 	lifes 		 1
 
-blast 		Kill 		 100 	UPDATE 
+blast 		Kill 		 0 	UPDATE 
 blast 		Create-diamonds	 80	UPDATE
 			 
 

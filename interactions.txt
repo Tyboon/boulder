@@ -82,7 +82,8 @@ parallel interaction Push
 end
 
 parallel interaction Kill
-	actions kill die
+	condition alive?	
+	actions kill
 end
 
 parallel interaction RollRight

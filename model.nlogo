@@ -174,10 +174,10 @@ to init-diamond
   set moving? false
 end
 
-to init-blast [ dm? ]
+to init-blast [ s dm? ]
   ioda:init-agent
   set color orange
-  set strength 3
+  set strength s
   set diamond-maker? dm?
 end
 
@@ -295,7 +295,7 @@ end
 to diamonds::create-blast
   let target ioda:my-target
   let dm? ifelse-value ([breed] of ioda:my-target = monsters) [ [right-handed?] of ioda:my-target ] [ true ]
-  hatch-blast 1 [ init-blast dm? move-to target]
+  hatch-blast 1 [ init-blast 2 dm? move-to target]
 end
 
 to diamonds::die
@@ -365,7 +365,7 @@ end
 to rocks::create-blast
   let target ioda:my-target
   let dm? ifelse-value ([breed] of ioda:my-target = monsters) [ [right-handed?] of ioda:my-target ] [ true ]
-  hatch-blast 1 [ init-blast dm? move-to target]
+  hatch-blast 1 [ init-blast 2 dm? move-to target]
 end
 
 to rocks::die
@@ -446,7 +446,7 @@ end
 
 to monsters::create-blast
   let dm? ifelse-value ([breed] of ioda:my-target = heros) [ true ] [ right-handed? ]
-  hatch-blast 1 [ init-blast dm? ]
+  hatch-blast 1 [ init-blast 2 dm? ]
 end
 
 ; dirt-related primitives
@@ -511,7 +511,7 @@ to heros::move-forward
 end
 
 to heros::create-blast
-  hatch-blast 1 [ init-blast true ]
+  hatch-blast 1 [ init-blast 2 true ]
 end
 
 to heros::increase-score
@@ -552,34 +552,36 @@ end
 ;    ]
 ;end
 
+;if ((breed != walls and breed != doors) or (breed = walls and destructible?)) [ioda:die]
 to blast::kill
-  let n turtles-on neighbors
-  ask n [
-    if ((breed != walls and breed != doors) or (breed = walls and destructible?))
-    [ioda:die]
-    let n1 any? turtles-on neighbors
-    4n1 [
-      let rdm1 (random 3 >= 1)
-      if (rdm1 and ((breed != walls and breed != doors) or (breed = walls and destructible?)))
-      [ioda:die]
-      let n2 turtles-on neighbors
-      ask n2 [
-        let rdm2 (random 2 = 0)
-        if (rdm2 and ((breed != walls and breed != doors) or (breed = walls and destructible?)))
-        [ioda:die]
-        ;let n3 turtles-on neighbors
-        ;ask n3 [
-          ;let rdm3 (random 3 >= 2)
-          ;if (rdm3 and ((breed != walls and breed != doors) or (breed = walls and destructible?)))
-          ;[ioda:die]
-        ;]
+  set strength strength - 1
+  ;let dm diamond-maker?
+  let newStrength strength
+  ask neighbors [
+    if not any? blast-here [
+      if any? turtles-here [
+        ask turtles-here [
+          let rdm (random 3 <= newStrength)
+          if (rdm and (breed != walls and breed != doors) or (breed = walls and destructible?))
+          [ioda:die]
+        ]
       ]
+      sprout-blast 1 [init-blast newStrength true]
     ]
   ]
+  set hidden? true
 end
 
 to blast::die
   ioda:die
+end
+
+to-report blast::alive?
+  if strength <= 0 [
+    ioda:die
+    report false
+  ]
+  report true
 end
 
 to-report blast::dm?
@@ -588,7 +590,9 @@ end
 
 to blast::create-diamonds
   ask neighbors [
-    sprout-diamonds 1 [init-diamond]
+    if not any? turtles-here [
+      sprout-diamonds 1 [init-diamond]
+    ]
   ]
 end
 
