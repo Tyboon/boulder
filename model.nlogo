@@ -12,17 +12,11 @@ breed [dynamites dynamite]
 breed [dirt]
 breed [blast]
 breed [lifes life]
-<<<<<<< HEAD
 breed [amibes amibe]
 
 globals       [ nb_dynamites score nb-to-collect countdown nb_keys nb_amibes tot_amibes]
-heros-own     [ moving? orders ]
-=======
 breed [transports transport]
-
-globals       [ nb_dynamites score nb-to-collect countdown nb_keys]
 heros-own     [ moving? orders teleporting?]
->>>>>>> 365d7a9e2b9bfad5340d0498d80926004b3824b4
 diamonds-own  [ moving? ]
 monsters-own  [ moving? right-handed? ]
 rocks-own     [ moving? ]
@@ -118,12 +112,6 @@ to create-agent [ char ]
                                     [sprout-dynamites 1 [init-dynamite -1]]
                                   [ ifelse (char = "L")
                                     [sprout-lifes 1 [init-lifes]]
-<<<<<<< HEAD
-                                    [ifelse (char ="A")
-                                      [sprout-amibes 1 [init-amibe]]
-                                      []
-                                    ]
-=======
                                     [ ifelse (char = "Y")[
                                     sprout-transports 1 [init-transports yellow]]
                                     [ifelse (char = "r")
@@ -135,13 +123,16 @@ to create-agent [ char ]
                                              [sprout-transports 1 [init-transports white]]
                                              [ifelse (char = "c")
                                                [sprout-diamonds 1 [init-diamond red]]
-                                               []
+                                               [ifelse (char ="A")
+                                                 [sprout-amibes 1 [init-amibe]]
+                                                 []
                                                ]
                                              ]
+                                         ]
+                                      ]
                                     ]
                                     ]
                                     ]
->>>>>>> 365d7a9e2b9bfad5340d0498d80926004b3824b4
                                   ]
                             ]
                         ]
@@ -151,7 +142,6 @@ to create-agent [ char ]
         ]
     ]
   ]
- ]
 end
 
 to init-world
@@ -163,13 +153,10 @@ to init-world
   set-default-shape diamonds "diamond"
   set-default-shape dirt "dirt"
   set-default-shape blast "star"
-<<<<<<< HEAD
-  set-default-shape amibes "amoebe"
-=======
+  set-default-shape amibes "tile log"
   set-default-shape dynamites "dynamite"
   set-default-shape lifes "heart"
   set-default-shape transports "target"
->>>>>>> 365d7a9e2b9bfad5340d0498d80926004b3824b4
   ifelse(tutorial)
     [read-level(word tutorials ".txt")]
     [read-level (word level ".txt")]
@@ -254,16 +241,17 @@ to init-dynamite [c]
   set moving? false
 end
 
-<<<<<<< HEAD
+
 to init-amibe
   set mutate? false
+  set color green
   ioda:init-agent
-=======
+end
+
 to init-transports [c]
   ioda:init-agent
   set shape "target"
   set color c
->>>>>>> 365d7a9e2b9bfad5340d0498d80926004b3824b4
 end
 
 ; primitives that are shared by several breeds
@@ -794,21 +782,15 @@ to transformInRocks
   ]
 end
 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 637
 10
-<<<<<<< HEAD
-882
-198
-=======
-1547
-311
->>>>>>> 365d7a9e2b9bfad5340d0498d80926004b3824b4
+1447
+281
 -1
 -1
-22.5
+20.0
 1
 8
 1
@@ -819,13 +801,8 @@ GRAPHICS-WINDOW
 0
 1
 0
-<<<<<<< HEAD
-9
--6
-=======
 39
 -11
->>>>>>> 365d7a9e2b9bfad5340d0498d80926004b3824b4
 0
 0
 0
@@ -1056,7 +1033,7 @@ CHOOSER
 107
 tutorials
 tutorials
-"dynamites" "magic_walls" "lifes" "amibes"
+"dynamites" "magic-walls" "lifes" "teleportation"
 3
 
 SWITCH
@@ -1066,7 +1043,7 @@ SWITCH
 155
 tutorial
 tutorial
-0
+1
 1
 -1000
 
@@ -1077,7 +1054,7 @@ SWITCH
 155
 show-dijkstra?
 show-dijkstra?
-1
+0
 1
 -1000
 
@@ -1158,47 +1135,6 @@ airplane
 true
 0
 Polygon -7500403 true true 150 0 135 15 120 60 120 105 15 165 15 195 120 180 135 240 105 270 120 285 150 270 180 285 210 270 165 240 180 180 285 195 285 165 180 105 180 60 165 15
-
-amoebe
-false
-6
-Rectangle -13840069 true true 0 -15 300 285
-Line -14835848 false 0 30 45 15
-Line -14835848 false 45 15 120 30
-Line -14835848 false 120 30 180 45
-Line -14835848 false 180 45 225 45
-Line -14835848 false 225 45 165 60
-Line -14835848 false 165 60 120 75
-Line -14835848 false 120 75 30 60
-Line -14835848 false 30 60 0 60
-Line -13345367 false 300 30 270 45
-Line -14835848 false 270 45 255 60
-Line -13345367 false 255 60 300 60
-Polygon -14835848 false false 15 120 90 90 136 95 210 75 270 90 300 120 270 150 195 165 150 150 60 150 30 135
-Polygon -13345367 false false 63 134 166 135 230 142 270 120 210 105 116 120 88 122
-Polygon -13345367 false false 22 45 84 53 144 49 50 31
-Line -13345367 false 0 180 15 180
-Line -13345367 false 15 180 105 195
-Line -13345367 false 105 195 180 195
-Line -13345367 false 225 210 165 225
-Line -13791810 false 165 225 60 225
-Line -13345367 false 60 225 0 210
-Line -13345367 false 300 180 264 191
-Line -13345367 false 255 225 300 210
-Line -14835848 false 16 196 116 211
-Line -14835848 false 180 300 105 285
-Line -14835848 false 135 255 240 240
-Line -14835848 false 240 240 300 255
-Line -14835848 false 135 255 105 285
-Line -14835848 false 180 0 240 15
-Line -14835848 false 240 15 300 0
-Line -13345367 false 0 300 45 285
-Line -13345367 false 45 285 45 270
-Line -13345367 false 45 270 0 255
-Polygon -13345367 false false 150 270 225 300 300 285 228 264
-Line -13345367 false 223 209 255 225
-Line -13345367 false 179 196 227 183
-Line -13345367 false 228 183 266 192
 
 arrow
 true
@@ -1357,29 +1293,6 @@ Line -11221820 false 255 90 255 150
 Line -11221820 false 45 150 150 300
 Line -11221820 false 255 150 150 300
 
-diamond_red
-false
-0
-Polygon -2674135 false false 60 30 240 30 285 90 285 150 150 300 15 150 15 90
-Polygon -2674135 true false 15 90 60 30 240 30 285 90 285 150 150 300 15 150
-Line -955883 false 15 150 285 150
-Line -955883 false 15 90 285 90
-Line -955883 false 120 30 90 90
-Line -955883 false 180 30 210 90
-Line -955883 false 150 30 150 90
-Line -955883 false 90 90 90 150
-Line -955883 false 150 90 150 150
-Line -955883 false 210 90 210 150
-Line -955883 false 90 150 150 300
-Line -955883 false 150 150 150 300
-Line -955883 false 210 150 150 300
-Line -955883 false 90 30 45 90
-Line -955883 false 210 30 255 90
-Line -955883 false 45 90 45 150
-Line -955883 false 255 90 255 150
-Line -955883 false 45 150 150 300
-Line -955883 false 255 150 150 300
-
 dirt
 false
 0
@@ -1414,52 +1327,7 @@ false
 0
 Circle -7500403 true true 90 90 120
 
-dynamite
-false
-0
-Circle -955883 false false 132 222 66
-Circle -6459832 false false 72 222 66
-Circle -955883 false false 102 162 66
-Circle -955883 false false 42 162 66
-Polygon -2674135 true false 15 241 75 271 89 245 135 271 150 246 195 271 285 121 235 96 255 61 195 31 181 55 135 31 45 181 49 183
-Circle -955883 true false 102 162 66
-Circle -2674135 true false 222 72 66
-Circle -2674135 true false 192 12 66
-Circle -2674135 true false 132 12 66
-Circle -955883 true false 12 222 66
-Circle -955883 true false 42 162 66
-Line -6459832 false 195 30 105 180
-Line -6459832 false 255 60 165 210
-Line -6459832 false 195 270 285 120
-Line -16777216 false 15 240 45 180
-Line -6459832 false 45 180 135 30
-Circle -955883 true false 132 222 66
-Circle -955883 true false 72 222 66
-Line -1 false 75 195 60 210
-Line -1 false 135 195 120 210
-Line -1 false 165 255 150 270
-Line -1 false 105 255 90 270
-Line -1 false 45 255 30 270
-Line -1184463 false 30 210 45 210
-Line -1184463 false 75 210 90 210
-Line -1184463 false 90 210 105 210
-Line -1184463 false 135 210 150 210
-Line -1184463 false 165 270 180 270
-Line -1184463 false 120 270 135 270
-Line -1184463 false 105 270 120 270
-Line -1184463 false 60 270 75 270
-Line -1184463 false 45 270 60 270
-Line -1184463 false 0 270 15 270
-Line -1184463 false 60 195 60 180
-Line -1184463 false 60 240 60 225
-Line -1184463 false 120 240 120 225
-Line -1184463 false 120 195 120 180
-Line -1184463 false 150 255 150 240
-Line -1184463 false 150 300 150 285
-Line -1184463 false 90 300 90 285
-Line -1184463 false 90 255 90 240
-Line -1184463 false 30 255 30 240
-Line -1184463 false 30 300 30 285
+
 
 eyes
 false
@@ -1547,14 +1415,6 @@ Circle -1 true false 81 78 56
 Circle -16777216 true false 99 98 19
 Circle -1 true false 155 80 56
 Circle -16777216 true false 171 98 17
-
-heart
-false
-0
-Circle -2674135 true false 138 63 85
-Circle -2674135 true false 78 63 85
-Polygon -2674135 true false 150 225 75 105 225 105 150 225 150 135
-Polygon -2674135 true false 195 105 165 105
 
 house
 false
