@@ -114,3 +114,11 @@ end
 parallel interaction Propagate_dist
 	actions propagate-dist
 end
+
+parallel interaction Expense
+	actions expense
+end
+
+parallel interaction TransformRocks
+	condition mutationRock?
+	actions	 transformInRocks

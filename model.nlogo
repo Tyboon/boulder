@@ -12,8 +12,9 @@ breed [dynamites dynamite]
 breed [dirt]
 breed [blast]
 breed [lifes life]
+breed [amibes amibe]
 
-globals       [ nb_dynamites score nb-to-collect countdown nb_keys]
+globals       [ nb_dynamites score nb-to-collect countdown nb_keys nb_amibes tot_amibes]
 heros-own     [ moving? orders ]
 diamonds-own  [ moving? ]
 monsters-own  [ moving? right-handed? ]
@@ -23,6 +24,7 @@ doors-own     [ open? ]
 blast-own     [ strength diamond-maker? ]
 dynamites-own [ counter moving?]
 patches-own   [ dijkstra-dist ]
+amibes-own    [ mutate?]
 
 to setup [countd]
   set countdown countd
@@ -49,6 +51,7 @@ to setup_level
 end
 
 to go
+  set nb_amibes 0
   ioda:go
   tick
   ifelse (not any? heros)
@@ -106,8 +109,11 @@ to create-agent [ char ]
                                     [sprout-dynamites 1 [init-dynamite -1]]
                                   [ ifelse (char = "L")
                                     [sprout-lifes 1 [init-lifes]]
-                                    []
+                                    [ifelse (char ="A")
+                                      [sprout-amibes 1 [init-amibe]]
+                                      []
                                     ]
+                                  ]
                             ]
                         ]
                     ]
@@ -128,11 +134,14 @@ to init-world
   set-default-shape diamonds "diamond"
   set-default-shape dirt "dirt"
   set-default-shape blast "star"
+  set-default-shape amibes "amoebe"
   ifelse(tutorial)
     [read-level(word tutorials ".txt")]
     [read-level (word level ".txt")]
   ;set countdown 0
   set nb-to-collect count diamonds
+  set nb_amibes 0
+  set tot_amibes 0
 end
 
 to init-hero
@@ -205,6 +214,11 @@ to init-dynamite [c]
   set shape "dynamite"
   set counter c
   set moving? false
+end
+
+to init-amibe
+  set mutate? false
+  ioda:init-agent
 end
 
 ; primitives that are shared by several breeds
@@ -557,6 +571,7 @@ to blast::kill
   set strength strength - 1
   ;let dm diamond-maker?
   let newStrength strength
+  let dm diamond-maker?
   ask neighbors [
     if not any? blast-here [
       if any? turtles-here [
@@ -566,7 +581,7 @@ to blast::kill
           [ioda:die]
         ]
       ]
-      sprout-blast 1 [init-blast newStrength true]
+      sprout-blast 1 [init-blast newStrength dm]
     ]
   ]
   set hidden? true
@@ -682,12 +697,48 @@ end
 to lifes::die
   ioda:die
 end
+
+; amibe-related primitives
+to amoebes::expense
+  let add_amibes 0
+  ask neighbors [
+    let t ([breed] of turtles-here)
+    if ((not any? turtles-here) or (t = dirt) ) [
+      if not empty? t and t = dirt [
+        ask dirt-here [
+          ioda:die
+        ]
+      ]
+      sprout-amibes 1 [init-amibe]
+      set add_amibes (add_amibes + 1)
+    ]
+  ]
+  set nb_amibes (nb_amibes + 1)
+end
+
+to amibes::die
+  set tot_amibes (tot_amibes - 1)
+  ioda:die
+end
+
+to-report mutationRock?
+  report mutate?
+end
+
+to transformInRocks
+  die
+  ask patch-here [
+    sprout-rocks 1 [init-rock]
+  ]
+end
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 637
 10
-1209
-603
+882
+198
 -1
 -1
 22.5
@@ -701,8 +752,8 @@ GRAPHICS-WINDOW
 0
 1
 0
-24
--24
+9
+-6
 0
 0
 0
@@ -933,8 +984,8 @@ CHOOSER
 107
 tutorials
 tutorials
-"dynamites" "magic_walls" "lifes"
-1
+"dynamites" "magic_walls" "lifes" "amibes"
+3
 
 SWITCH
 429
@@ -943,7 +994,7 @@ SWITCH
 155
 tutorial
 tutorial
-1
+0
 1
 -1000
 
@@ -1035,6 +1086,47 @@ airplane
 true
 0
 Polygon -7500403 true true 150 0 135 15 120 60 120 105 15 165 15 195 120 180 135 240 105 270 120 285 150 270 180 285 210 270 165 240 180 180 285 195 285 165 180 105 180 60 165 15
+
+amoebe
+false
+6
+Rectangle -13840069 true true 0 -15 300 285
+Line -14835848 false 0 30 45 15
+Line -14835848 false 45 15 120 30
+Line -14835848 false 120 30 180 45
+Line -14835848 false 180 45 225 45
+Line -14835848 false 225 45 165 60
+Line -14835848 false 165 60 120 75
+Line -14835848 false 120 75 30 60
+Line -14835848 false 30 60 0 60
+Line -13345367 false 300 30 270 45
+Line -14835848 false 270 45 255 60
+Line -13345367 false 255 60 300 60
+Polygon -14835848 false false 15 120 90 90 136 95 210 75 270 90 300 120 270 150 195 165 150 150 60 150 30 135
+Polygon -13345367 false false 63 134 166 135 230 142 270 120 210 105 116 120 88 122
+Polygon -13345367 false false 22 45 84 53 144 49 50 31
+Line -13345367 false 0 180 15 180
+Line -13345367 false 15 180 105 195
+Line -13345367 false 105 195 180 195
+Line -13345367 false 225 210 165 225
+Line -13791810 false 165 225 60 225
+Line -13345367 false 60 225 0 210
+Line -13345367 false 300 180 264 191
+Line -13345367 false 255 225 300 210
+Line -14835848 false 16 196 116 211
+Line -14835848 false 180 300 105 285
+Line -14835848 false 135 255 240 240
+Line -14835848 false 240 240 300 255
+Line -14835848 false 135 255 105 285
+Line -14835848 false 180 0 240 15
+Line -14835848 false 240 15 300 0
+Line -13345367 false 0 300 45 285
+Line -13345367 false 45 285 45 270
+Line -13345367 false 45 270 0 255
+Polygon -13345367 false false 150 270 225 300 300 285 228 264
+Line -13345367 false 223 209 255 225
+Line -13345367 false 179 196 227 183
+Line -13345367 false 228 183 266 192
 
 arrow
 true
