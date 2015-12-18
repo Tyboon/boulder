@@ -122,3 +122,10 @@ end
 parallel interaction TransformRocks
 	condition mutationRock?
 	actions	 transformInRocks
+
+parallel interaction Teleporte
+	condition moving? not-teleporting?
+	actions teleporte
+end
+
+
