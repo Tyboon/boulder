@@ -114,3 +114,9 @@ end
 parallel interaction Propagate_dist
 	actions propagate-dist
 end
+
+parallel interaction Teleporte
+	condition moving? not-teleporting?
+	actions teleporte
+end
+

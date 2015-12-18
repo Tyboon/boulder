@@ -12,9 +12,10 @@ breed [dynamites dynamite]
 breed [dirt]
 breed [blast]
 breed [lifes life]
+breed [transports transport]
 
 globals       [ nb_dynamites score nb-to-collect countdown nb_keys]
-heros-own     [ moving? orders ]
+heros-own     [ moving? orders teleporting?]
 diamonds-own  [ moving? ]
 monsters-own  [ moving? right-handed? ]
 rocks-own     [ moving? ]
@@ -82,7 +83,6 @@ to read-level [ filename ]
       set y y - 1 ]
   file-close
 end
-
 to create-agent [ char ]
   ifelse (char = "X")
     [ sprout-walls 1 [ init-wall false false] ]
@@ -106,8 +106,21 @@ to create-agent [ char ]
                                     [sprout-dynamites 1 [init-dynamite -1]]
                                   [ ifelse (char = "L")
                                     [sprout-lifes 1 [init-lifes]]
-                                    []
+                                    [ ifelse (char = "Y")[
+                                    sprout-transports 1 [init-transports yellow]]
+                                    [ifelse (char = "r")
+                                      [sprout-transports 1 [init-transports red]]
+                                      [ifelse (char = "G")[
+                                          sprout-transports 1 [init-transports green]
+                                      ]
+                                         [ifelse (char = "W")
+                                             [sprout-transports 1 [init-transports white]]
+                                             []
+                                             ]
                                     ]
+                                    ]
+                                    ]
+                                  ]
                             ]
                         ]
                     ]
@@ -128,10 +141,12 @@ to init-world
   set-default-shape diamonds "diamond"
   set-default-shape dirt "dirt"
   set-default-shape blast "star"
+  set-default-shape dynamites "dynamite"
+  set-default-shape lifes "heart"
+  set-default-shape transports "target"
   ifelse(tutorial)
     [read-level(word tutorials ".txt")]
     [read-level (word level ".txt")]
-  ;set countdown 0
   set nb-to-collect count diamonds
 end
 
@@ -205,6 +220,12 @@ to init-dynamite [c]
   set shape "dynamite"
   set counter c
   set moving? false
+end
+
+to init-transports [c]
+  ioda:init-agent
+  set shape "target"
+  set color c
 end
 
 ; primitives that are shared by several breeds
@@ -468,7 +489,7 @@ to heros::filter-neighbors
 end
 
 to-report heros::nothing-ahead?
-  report (default::nothing-ahead? 1) or (any? (doors-on patch-ahead 1) with [ doors::open? ])
+  report (default::nothing-ahead? 1) or (any? (doors-on patch-ahead 1) with [ doors::open? ]) or (any? (transports-on patch-ahead 1))
 end
 
 to-report heros::target-ahead?
@@ -508,6 +529,9 @@ end
 
 to heros::move-forward
   default::move-forward
+  let t turtles-on patch-here
+  if([breed] of t != transports)
+   [set teleporting? false]
 end
 
 to heros::create-blast
@@ -528,7 +552,18 @@ to-report heros::no-wall?
   report not any? walls-on patch-ahead 1
 end
 
+to-report heros::not-teleporting?
+  report (not teleporting?)
+end
 
+to heros::teleporte
+  let target ioda:target
+  if(any? (transports with [(color = ([ color ] of target)) and (xcor != [xcor] of target and ycor != [ycor] of target)]))
+   [let t (one-of (transports with [(color = ([ color ] of target)) and (xcor != [xcor] of target and ycor != [ycor] of target)]))
+  move-to (patch ([xcor] of t) ([ycor] of t))
+  set teleporting? true
+   ]
+end
 ; wall-related primitives
 
 to walls::break
@@ -686,8 +721,8 @@ end
 GRAPHICS-WINDOW
 637
 10
-1209
-603
+1547
+311
 -1
 -1
 22.5
@@ -701,8 +736,8 @@ GRAPHICS-WINDOW
 0
 1
 0
-24
--24
+39
+-11
 0
 0
 0
@@ -873,8 +908,8 @@ CHOOSER
 108
 level
 level
-"level0" "level1" "level2"
-1
+"level0" "level1" "level2" "level3" "level4"
+4
 
 MONITOR
 265

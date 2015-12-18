@@ -43,6 +43,8 @@ rocks		StopFalling 	 10 	diamonds 	 1
 rocks		StopFalling 	 10 	rocks		 1 
 rocks		StopFalling 	 10 	doors		 1 
 rocks		StopFalling 	 10 	dynamites	 1 
+rocks		StopFalling 	 10 	transports		 1 
+
 rocks		Explode 	 50 	monsters	 1 
 rocks		Explode 	 50 	heros		 1 
 rocks		RollRight 	 0 
@@ -57,6 +59,8 @@ monsters	Turn		 20 	diamonds	 1
 monsters	Turn		 20 	rocks		 1 
 monsters	Turn		 20 	doors		 1 
 monsters	Turn		 20 	monsters	 1 
+monsters 	Turn 		20 dynamites 	1
+monsters	Turn		 20 	transports	1
 monsters	Explode		 30 	heros		 1 
 
 heros		StopMoving	 100 	UPDATE
@@ -68,6 +72,7 @@ heros		Explode		 100    monsters	 0
 heros 		Push 		 100 	rocks 		 1
 heros		Collect		 80    	dynamites	 1 
 heros 		Collect 	 80 	lifes 		 1
+heros 	Teleporte 	80 	transports 	0
 
 blast 		Kill 		 0 	UPDATE 
 blast 		Create-diamonds	 80	UPDATE
@@ -82,5 +87,6 @@ dynamites	StopFalling 	 10 	diamonds 	 1
 dynamites	StopFalling 	 10 	rocks		 1 
 dynamites	StopFalling 	 10 	doors		 1 
 dynamites	StopFalling 	 10 	dynamites		 1 
+dynamites	StopFalling 	 10 	transports		 1 
 
 
